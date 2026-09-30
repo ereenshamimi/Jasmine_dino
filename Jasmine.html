@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jasmine's Digital Portfolio</title>
+    <meta
+      name="description"
+      content="Cute dinosaur-themed digital portfolio for Jasmine Closellda Melia anak Jerry."
+    />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+
+      :root {
+        --sage: #b7d7a8;
+        --pastel-yellow: #fff2a6;
+        --mint: #ddeed5;
+        --cream: #fffdf3;
+        --leaf: #7dbb90;
+        --green-dark: #355e3b;
+        --green-deep: #245b3a;
+        --white: #ffffff;
+        --border-soft: rgba(53, 94, 59, 0.2);
+        --shadow-soft: 0 18px 45px rgba(38, 79, 54, 0.12);
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top left, rgba(183, 215, 168, 0.3), transparent 28%),
+          radial-gradient(circle at bottom right, rgba(255, 242, 166, 0.4), transparent 34%),
+          var(--cream);
+        color: var(--green-dark);
+        font-family: 'Poppins', sans-serif;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .page-shell {
+        max-width: 1280px;
+        margin: 24px auto;
+        background: rgba(255, 255, 255, 0.62);
+        border: 5px solid var(--pastel-yellow);
+        border-radius: 32px;
+        box-shadow: var(--shadow-soft);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .page-shell::before,
+      .page-shell::after {
+        content: "";
+        position: absolute;
+        inset: 16px;
+        border: 3px solid rgba(183, 215, 168, 0.8);
+        border-radius: 28px;
+        pointer-events: none;
+      }
+
+      .loader {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 253, 243, 0.96);
+        display: grid;
+        place-items: center;
+        z-index: 2000;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+
+      .loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loader-box {
+        text-align: center;
+        font-family: 'Fredoka', sans-serif;
+      }
+
+      .dino-loader {
+        width: 96px;
+        height: 96px;
+        margin: 0 auto 14px;
+        position: relative;
+        animation: bounce 1s ease-in-out infinite;
+      }
+
+      .dino-loader .head,
+      .dino-loader .body,
+      .dino-loader .tail,
+      .dino-loader .leg,
+      .dino-loader .arm {
+        position: absolute;
+        background: var(--sage);
+        border-radius: 999px;
+      }
+
+      .dino-loader .body {
+        width: 54px;
+        height: 30px;
+        left: 18px;
+        top: 34px;
+      }
+
+      .dino-loader .head {
+        width: 28px;
+        height: 22px;
+        left: 60px;
+        top: 18px;
+      }
+
+      .dino-loader .tail {
+        width: 28px;
+        height: 12px;
+        left: 0;
+        top: 42px;
+        transform: rotate(-18deg);
+      }
+
+      .dino-loader .arm {
+        width: 12px;
+        height: 20px;
+        left: 52px;
+        top: 42px;
+        transform: rotate(25deg);
+      }
+
+      .dino-loader .leg {
+        width: 10px;
+        height: 24px;
+        bottom: 5px;
+      }
+
+      .dino-loader .leg.one { left: 28px; }
+      .dino-loader .leg.two { left: 52px; }
+
+      .loader-text {
+        font-size: 1.2rem;
+        color: var(--green-dark);
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        background: rgba(183, 215, 168, 0.9);
+        border-bottom: 2px dashed rgba(53, 94, 59, 0.2);
+      }
+
+      .nav-wrap {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 16px 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .brand-badge {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--pastel-yellow);
+        display: grid;
+        place-items: center;
+        box-shadow: 0 8px 18px rgba(255, 242, 166, 0.45);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-links a {
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 600;
+        color: var(--green-dark);
+        transition: all 0.25s ease;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus-visible {
+        background: rgba(255, 255, 255, 0.75);
+        transform: translateY(-2px);
+      }
+
+      .menu-toggle {
+        display: none;
+      }
+
+      main {
+        position: relative;
+        z-index: 1;
+      }
+
+      section {
+        scroll-margin-top: 120px;
+      }
+
+      .hero {
+        position: relative;
+        padding: 70px 32px 48px;
+        background: linear-gradient(135deg, rgba(221, 238, 213, 0.88), rgba(255, 242, 166, 0.34));
+      }
+
+      .hero-inner {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .hero-copy {
+        position: relative;
+        z-index: 1;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--white);
+        padding: 10px 16px;
+        border-radius: 999px;
+        border: 2px solid rgba(53, 94, 59, 0.15);
+        box-shadow: 0 10px 18px rgba(53, 94, 59, 0.08);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      .brand,
+      .section-title,
+      .card-title,
+      .big-title {
+        font-family: 'Fredoka', sans-serif;
+      }
+
+      h1 {
+        margin: 18px 0 12px;
+        font-size: clamp(2.4rem, 5vw, 4.25rem);
+        line-height: 1.06;
+        color: var(--green-dark);
+      }
+
+      .hero-sub {
+        font-size: clamp(1.2rem, 2vw, 1.75rem);
+        margin: 0 0 16px;
+        color: var(--green-deep);
+        font-weight: 600;
+      }
+
+      .hero-intro {
+        max-width: 580px;
+        font-size: 1.04rem;
+        line-height: 1.8;
+        color: rgba(53, 94, 59, 0.82);
+        margin-bottom: 22px;
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .primary-btn,
+      .secondary-btn,
+      .upload-btn,
+      .remove-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 14px 24px;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        cursor: pointer;
+      }
+
+      .primary-btn {
+        background: linear-gradient(135deg, var(--sage), #a5d18c);
+        color: var(--green-deep);
+        box-shadow: 0 12px 20px rgba(138, 190, 117, 0.3);
+      }
+
+      .secondary-btn {
+        background: var(--white);
+        color: var(--green-dark);
+        border: 2px solid rgba(53, 94, 59, 0.12);
+      }
+
+      .primary-btn:hover,
+      .secondary-btn:hover,
+      .upload-btn:hover,
+      .remove-btn:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 12px 22px rgba(53, 94, 59, 0.12);
+      }
+
+      .hero-art {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 500px;
+      }
+
+      .dino-scene {
+        position: relative;
+        width: min(100%, 500px);
+        height: 450px;
+        border-radius: 36px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(221,238,213,0.75));
+        border: 2px dashed rgba(53, 94, 59, 0.18);
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(53, 94, 59, 0.08);
+      }
+
+      .grass {
+        position: absolute;
+        inset: auto 0 0;
+        height: 110px;
+        background: linear-gradient(180deg, rgba(143, 210, 119, 0.66), rgba(110, 170, 97, 0.9));
+      }
+
+      .dino-figure {
+        position: absolute;
+        left: 50%;
+        bottom: 90px;
+        transform: translateX(-50%);
+        width: 300px;
+        height: 220px;
+        animation: floaty 4s ease-in-out infinite;
+      }
+
+      .dino-figure .body {
+        position: absolute;
+        left: 55px;
+        bottom: 0;
+        width: 120px;
+        height: 88px;
+        background: linear-gradient(135deg, #a5d18c, #7dbd7c);
+        border-radius: 42% 42% 38% 38%;
+        box-shadow: inset -12px -10px rgba(96, 160, 90, 0.2);
+      }
+
+      .dino-figure .head {
+        position: absolute;
+        left: 145px;
+        bottom: 62px;
+        width: 86px;
+        height: 72px;
+        background: linear-gradient(135deg, #b7d7a8, #8ec98b);
+        border-radius: 52% 48% 50% 50%;
+      }
+
+      .dino-figure .tail {
+        position: absolute;
+        left: 16px;
+        bottom: 34px;
+        width: 90px;
+        height: 26px;
+        background: #8ec98b;
+        border-radius: 60% 0 0 60%;
+        transform: rotate(-18deg);
+      }
+
+      .dino-figure .arm {
+        position: absolute;
+        width: 20px;
+        height: 56px;
+        background: #8cc48a;
+        border-radius: 14px;
+        left: 145px;
+        bottom: 10px;
+        transform-origin: center top;
+        animation: wave 1.8s ease-in-out infinite;
+      }
+
+      .dino-figure .arm.right {
+        left: 185px;
+        transform: rotate(18deg);
+      }
+
+      .dino-figure .eye {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #355e3b;
+        border-radius: 50%;
+        left: 190px;
+        bottom: 96px;
+      }
+
+      .dino-figure .eye::after {
+        content: "";
+        position: absolute;
+        inset: 2px 2px auto auto;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.95);
+      }
+
+      .dino-figure .mouth {
+        position: absolute;
+        left: 182px;
+        bottom: 78px;
+        width: 34px;
+        height: 18px;
+        border-bottom: 3px solid var(--green-dark);
+        border-radius: 0 0 18px 18px;
+      }
+
+      .dino-figure .leg {
+        position: absolute;
+        width: 18px;
+        height: 60px;
+        background: #7cb776;
+        bottom: -12px;
+        border-radius: 18px;
+      }
+
+      .dino-figure .leg.l1 { left: 88px; }
+      .dino-figure .leg.l2 { left: 118px; }
+      .dino-figure .leg.l3 { left: 150px; }
+
+      .tiny-stars {
+        position: absolute;
+        inset: 0;
+      }
+
+      .star,
+      .leaf,
+      .footprint,
+      .sparkle,
+      .flower {
+        position: absolute;
+        animation: drift 8s ease-in-out infinite alternate;
+        opacity: 0.9;
+      }
+
+      .star {
+        width: 12px;
+        height: 12px;
+        background: var(--pastel-yellow);
+        clip-path: polygon(50% 0%, 61% 38%, 100% 50%, 61% 62%, 50% 100%, 39% 62%, 0% 50%, 39% 38%);
+        box-shadow: 0 0 0 4px rgba(255, 242, 166, 0.18);
+      }
+
+      .sparkle {
+        width: 16px;
+        height: 16px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,242,166,0.7));
+        clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+      }
+
+      .leaf {
+        width: 18px;
+        height: 24px;
+        background: linear-gradient(135deg, #8dd3a7, #a7d9a2);
+        border-radius: 100% 0 100% 0;
+        transform: rotate(-30deg);
+      }
+
+      .footprint {
+        width: 18px;
+        height: 28px;
+        background: rgba(53, 94, 59, 0.24);
+        border-radius: 10px 10px 8px 8px;
+        opacity: 0.5;
+      }
+
+      .footprint::before,
+      .footprint::after {
+        content: "";
+        position: absolute;
+        background: rgba(53, 94, 59, 0.24);
+        border-radius: 50%;
+      }
+
+      .footprint::before {
+        width: 10px;
+        height: 12px;
+        left: 2px;
+        top: 16px;
+      }
+
+      .footprint::after {
+        width: 10px;
+        height: 12px;
+        right: 2px;
+        top: 16px;
+      }
+
+      .flower {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: radial-gradient(circle at center, #fff7d3 0 20%, #ffc74a 21% 35%, transparent 36%);
+        box-shadow: 0 0 0 5px rgba(255, 242, 166, 0.18);
+      }
+
+      .section {
+        padding: 70px 32px;
+      }
+
+      .section-inner {
+        max-width: 1190px;
+        margin: 0 auto;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 36px;
+      }
+
+      .section-header .eyebrow {
+        display: inline-block;
+        background: rgba(255, 242, 166, 0.62);
+        color: var(--green-dark);
+        padding: 7px 16px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: clamp(2.1rem, 3vw, 3rem);
+        line-height: 1.2;
+        color: var(--green-dark);
+      }
+
+      .about-wrap {
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 28px;
+        align-items: center;
+      }
+
+      .about-card {
+        background: rgba(255,255,255,0.8);
+        border: 2px solid rgba(53, 94, 59, 0.08);
+        border-radius: 28px;
+        padding: 30px;
+        box-shadow: 0 18px 35px rgba(53, 94, 59, 0.08);
+      }
+
+      .about-text {
+        font-size: 1rem;
+        line-height: 1.9;
+        color: rgba(53, 94, 59, 0.82);
+      }
+
+      .about-illustration {
+        position: relative;
+        min-height: 380px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, rgba(221,238,213,0.8), rgba(255,242,166,0.38));
+        border: 2px dashed rgba(53, 94, 59, 0.12);
+        border-radius: 28px;
+        overflow: hidden;
+      }
+
+      .avatar-card {
+        width: min(100%, 300px);
+        height: 300px;
+        position: relative;
+      }
+
+      .avatar-card svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .scenario-wrap {
+        background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(221,238,213,0.66));
+        border-radius: 28px;
+        padding: 18px 0 0;
+        border: 2px dashed rgba(53, 94, 59, 0.15);
+      }
+
+      .announcement {
+        max-width: 1120px;
+        margin: 0 auto 24px;
+        background: rgba(255,242,166,0.5);
+        border: 2px solid rgba(53, 94, 59, 0.1);
+        border-radius: 24px;
+        padding: 26px 24px;
+        display: flex;
+        gap: 22px;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .announcement::before {
+        content: "🦕";
+        position: absolute;
+        right: 24px;
+        font-size: 4rem;
+        opacity: 0.12;
+        transform: rotate(12deg);
+      }
+
+      .announcement-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin: 0;
+        color: var(--green-dark);
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 20px;
+        padding: 0 20px 22px;
+      }
+
+      .upload-card {
+        background: rgba(255,255,255,0.92);
+        border: 2px solid rgba(53, 94, 59, 0.08);
+        border-radius: 24px;
+        padding: 18px 16px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        box-shadow: 0 12px 18px rgba(53, 94, 59, 0.05);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .upload-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 24px rgba(53, 94, 59, 0.08);
+      }
+
+      .upload-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .icon-badge {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, rgba(183, 215, 168, 0.6), rgba(255, 242, 166, 0.8));
+        font-size: 1.7rem;
+      }
+
+      .not-graded {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--pastel-yellow);
+        color: var(--green-dark);
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .file-name {
+        margin: 0;
+        font-size: 0.96rem;
+        font-weight: 700;
+        line-height: 1.5;
+        color: var(--green-dark);
+      }
+
+      .upload-text {
+        margin: 0;
+        color: rgba(53, 94, 59, 0.7);
+        font-size: 0.88rem;
+        line-height: 1.65;
+        min-height: 48px;
+      }
+
+      .upload-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: auto;
+      }
+
+      .upload-btn {
+        background: linear-gradient(135deg, #d8f0c3, var(--sage));
+        color: var(--green-dark);
+        padding: 11px 14px;
+        flex: 1;
+      }
+
+      .remove-btn {
+        background: rgba(211, 94, 94, 0.08);
+        color: #7c2b2b;
+        padding-inline: 12px;
+      }
+
+      .file-meta {
+        margin-top: 8px;
+        min-height: 22px;
+        padding: 8px 10px;
+        border-radius: 12px;
+        background: rgba(221, 238, 213, 0.6);
+        border: 1px solid rgba(53, 94, 59, 0.08);
+        font-size: 0.78rem;
+        color: var(--green-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .status-ready {
+        background: rgba(183, 215, 168, 0.35);
+      }
+
+      .status-selected {
+        background: rgba(255, 242, 166, 0.5);
+      }
+
+      .hidden-input {
+        display: none;
+      }
+
+      .note-box {
+        margin: 0 auto 28px;
+        padding: 24px 28px;
+        max-width: 1120px;
+        background: linear-gradient(135deg, rgba(255,242,166,0.38), rgba(255,255,255,0.9));
+        border: 2px solid rgba(53, 94, 59, 0.12);
+        border-radius: 24px;
+        box-shadow: 0 12px 28px rgba(53, 94, 59, 0.06);
+      }
+
+      .note-box p {
+        margin: 0;
+        font-size: 1.02rem;
+        line-height: 1.8;
+        color: var(--green-dark);
+      }
+
+      .checklist-wrap {
+        background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(221,238,213,0.8));
+        border-radius: 26px;
+        border: 2px dashed rgba(53, 94, 59, 0.14);
+        padding: 28px;
+      }
+
+      .checklist {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 16px;
+        list-style: none;
+        padding: 0;
+        margin: 24px 0 0;
+      }
+
+      .check-item {
+        background: rgba(255,255,255,0.86);
+        border-radius: 20px;
+        padding: 16px 14px;
+        border: 2px solid rgba(53, 94, 59, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 70px;
+        transition: all 0.2s ease;
+      }
+
+      .check-item.complete {
+        border-color: rgba(123, 186, 107, 0.8);
+        background: rgba(183, 215, 168, 0.26);
+      }
+
+      .checkmark {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(53, 94, 59, 0.08);
+        display: grid;
+        place-items: center;
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: transparent;
+      }
+
+      .check-item.complete .checkmark {
+        background: var(--sage);
+        color: var(--green-dark);
+      }
+
+      .check-label {
+        font-size: 0.8rem;
+        color: rgba(53, 94, 59, 0.8);
+        font-weight: 600;
+      }
+
+      .progress-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-top: 26px;
+        flex-wrap: wrap;
+      }
+
+      .progress-bar {
+        flex: 1;
+        min-width: 200px;
+        height: 16px;
+        background: rgba(53, 94, 59, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid rgba(53, 94, 59, 0.08);
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--sage), #9ccf8e, var(--pastel-yellow));
+        transition: width 0.25s ease;
+      }
+
+      .progress-text {
+        font-weight: 700;
+        color: var(--green-dark);
+      }
+
+      .completion-msg {
+        display: none;
+        margin-top: 18px;
+        background: rgba(183, 215, 168, 0.45);
+        border: 2px solid rgba(53, 94, 59, 0.1);
+        color: var(--green-dark);
+        border-radius: 18px;
+        padding: 14px 16px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .completion-msg.show {
+        display: block;
+      }
+
+      footer {
+        background: linear-gradient(135deg, rgba(183, 215, 168, 0.9), rgba(255, 242, 166, 0.4));
+        border-top: 2px dashed rgba(53, 94, 59, 0.16);
+        padding: 32px 20px 48px;
+      }
+
+      .footer-inner {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        text-align: center;
+        color: var(--green-dark);
+      }
+
+      .footer-inner p {
+        margin: 0;
+        line-height: 1.7;
+        font-weight: 600;
+      }
+
+      @keyframes floaty {
+        0%, 100% { transform: translateX(-50%) translateY(0); }
+        50% { transform: translateX(-50%) translateY(-10px); }
+      }
+
+      @keyframes wave {
+        0%, 100% { transform: rotate(18deg); }
+        50% { transform: rotate(-12deg); }
+      }
+
+      @keyframes drift {
+        0% { transform: translateY(0) translateX(0) rotate(0deg); }
+        100% { transform: translateY(-18px) translateX(8px) rotate(12deg); }
+      }
+
+      @media (max-width: 1100px) {
+        .cards-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .checklist {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 900px) {
+        .hero-inner,
+        .about-wrap {
+          grid-template-columns: 1fr;
+        }
+
+        .dino-scene {
+          max-width: 560px;
+          margin: 0 auto;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .menu-toggle {
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          border: 1px solid rgba(53, 94, 59, 0.12);
+          background: rgba(255,255,255,0.42);
+          color: var(--green-dark);
+          font-size: 1.4rem;
+          cursor: pointer;
+        }
+
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: calc(100% + 10px);
+          left: 20px;
+          right: 20px;
+          background: rgba(255,255,255,0.94);
+          border-radius: 18px;
+          padding: 14px 12px;
+          box-shadow: 0 18px 36px rgba(53, 94, 59, 0.12);
+          border: 1px solid rgba(53, 94, 59, 0.08);
+        }
+
+        .nav-links.open {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .nav-links a {
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .page-shell {
+          margin: 10px auto;
+          border-radius: 22px;
+        }
+
+        .hero,
+        .section {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+
+        .cards-grid,
+        .checklist {
+          grid-template-columns: 1fr;
+        }
+
+        .announcement {
+          padding: 18px 18px 20px;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .upload-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .upload-btn,
+        .remove-btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loader" id="loader" aria-live="polite">
+      <div class="loader-box">
+        <div class="dino-loader" aria-hidden="true">
+          <span class="tail"></span>
+          <span class="body"></span>
+          <span class="arm"></span>
+          <span class="head"></span>
+          <span class="leg one"></span>
+          <span class="leg two"></span>
+        </div>
+        <div class="loader-text">Loading little explorer...</div>
+      </div>
+    </div>
+
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="nav-wrap">
+          <a href="#home" class="brand" aria-label="Home">
+            <span class="brand-badge">🦕</span>
+            <span>Jasmine</span>
+          </a>
+
+          <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+
+          <nav aria-label="Main navigation">
+            <ul class="nav-links" id="navLinks">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#about">About Me</a></li>
+              <li><a href="#scenario1">Scenario 1</a></li>
+              <li><a href="#submissions">My Submissions</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" id="home">
+          <div class="tiny-stars" aria-hidden="true">
+            <span class="star" style="left: 12%; top: 18%; animation-delay: 0.5s;"></span>
+            <span class="star" style="left: 20%; top: 34%; animation-delay: 1.2s;"></span>
+            <span class="sparkle" style="left: 78%; top: 12%; animation-delay: 1.7s;"></span>
+            <span class="star" style="left: 82%; top: 20%; animation-delay: 0.8s;"></span>
+            <span class="sparkle" style="left: 24%; top: 62%; animation-delay: 1.1s;"></span>
+            <span class="flower" style="left: 16%; bottom: 16%; animation-delay: 1.5s;"></span>
+            <span class="leaf" style="right: 11%; top: 22%; animation-delay: 0.7s;"></span>
+            <span class="leaf" style="right: 21%; bottom: 16%; animation-delay: 1.8s;"></span>
+            <span class="footprint" style="left: 8%; bottom: 14%; transform: rotate(20deg);"></span>
+            <span class="footprint" style="right: 16%; bottom: 18%; transform: rotate(-20deg);"></span>
+          </div>
+
+          <div class="hero-inner">
+            <div class="hero-copy">
+              <div class="badge">Scenario 1 | Digital Portfolio</div>
+              <h1>Welcome to My Digital Portfolio!</h1>
+              <p class="hero-sub">Hi there, little explorer! 🦕</p>
+              <p class="hero-intro">
+                Welcome to my little corner of the digital world! This portfolio showcases my work,
+                creativity, and learning journey through Scenario 1. Let's explore my projects together!
+              </p>
+              <div class="cta-row">
+                <a href="#scenario1" class="primary-btn">Explore My Portfolio</a>
+                <a href="#about" class="secondary-btn">Learn More</a>
+              </div>
+            </div>
+
+            <div class="hero-art" aria-label="Cute dinosaur illustration">
+              <div class="dino-scene">
+                <div class="tiny-stars" aria-hidden="true">
+                  <span class="star" style="left: 18%; top: 14%;"></span>
+                  <span class="star" style="right: 18%; top: 26%;"></span>
+                  <span class="sparkle" style="left: 46%; top: 18%;"></span>
+                  <span class="flower" style="right: 18%; bottom: 18%;"></span>
+                  <span class="leaf" style="left: 18%; bottom: 18%;"></span>
+                </div>
+
+                <div class="dino-figure" aria-hidden="true">
+                  <div class="tail"></div>
+                  <div class="body"></div>
+                  <div class="head"></div>
+                  <div class="arm"></div>
+                  <div class="arm right"></div>
+                  <div class="eye"></div>
+                  <div class="mouth"></div>
+                  <div class="leg l1"></div>
+                  <div class="leg l2"></div>
+                  <div class="leg l3"></div>
+                </div>
+                <div class="grass"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="about">
+          <div class="section-inner">
+            <div class="section-header">
+              <span class="eyebrow">About</span>
+              <h2 class="section-title">A Little About Me 🌼</h2>
+            </div>
+
+            <div class="about-wrap">
+              <div class="about-card">
+                <h3 style="margin-top:0; font-size: 2rem;">Jasmine Closellda Melia anak Jerry</h3>
+                <p class="about-text">
+                  Hi! I'm Jasmine Closellda Melia anak Jerry. This is my digital portfolio, where I showcase my
+                  Scenario 1 assignments, creative work, and learning journey.
+                </p>
+                <p class="about-text">
+                  I enjoy creating thoughtful work, exploring digital ideas, and turning every assignment into a chance to learn,
+                  grow, and express my creativity. This little portfolio is my cozy corner of the internet — a place where my ideas,
+                  projects, and progress can grow like a tiny dinosaur garden.
+                </p>
+              </div>
+
+              <div class="about-illustration" aria-label="Cute dinosaur avatar">
+                <div class="avatar-card">
+                  <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="cute dinosaur avatar">
+                    <circle cx="160" cy="163" r="90" fill="#E6F5D6"/>
+                    <path d="M74 182c0-38 30-68 68-68h24c31 0 56 19 66 45l10 28c7 18-2 38-22 45l-57 20c-19 7-41 7-60 0l-17-6c-22-8-32-33-22-55l10-9z" fill="#A8D496"/>
+                    <path d="M158 120h65c26 0 46 21 46 47v20c0 18-14 32-32 32h-50l-35-28 6-71z" fill="#B7D7A8"/>
+                    <circle cx="205" cy="151" r="8" fill="#355E3B"/>
+                    <circle cx="214" cy="147" r="2.5" fill="#fff"/>
+                    <path d="M182 168c11 8 22 12 35 12" fill="none" stroke="#355E3B" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M128 175l-30 20" stroke="#7DAE73" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M151 214l-15 46" stroke="#7DAE73" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M184 214l12 46" stroke="#7DAE73" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M210 214l20 42" stroke="#7DAE73" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M142 188l-15 12" stroke="#A8D496" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M195 188l17 12" stroke="#A8D496" stroke-width="10" stroke-linecap="round"/>
+                    <circle cx="110" cy="230" r="12" fill="#FFF2A6"/>
+                    <circle cx="220" cy="250" r="12" fill="#FFF2A6"/>
+                    <circle cx="228" cy="208" r="7" fill="#FFF2A6"/>
+                    <circle cx="94" cy="210" r="7" fill="#FFF2A6"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="scenario1">
+          <div class="section-inner scenario-wrap">
+            <div class="section-header">
+              <span class="eyebrow">Scenario 1</span>
+              <h2 class="section-title">Scenario 1: My Submission Corner 🦕</h2>
+            </div>
+
+            <div class="announcement">
+              <div>
+                <p class="announcement-text" style="font-weight: 800; font-size: 1.22rem; margin-bottom: 6px;">Congratulations on completing Scenario 1!</p>
+                <p class="announcement-text">Please use this space to upload:</p>
+              </div>
+            </div>
+
+            <div class="cards-grid" id="uploadGrid">
+              <article class="upload-card" data-key="memo">
+                <div class="upload-head">
+                  <div class="icon-badge" aria-hidden="true">📄</div>
+                </div>
+                <p class="file-name">S1_memo_Student name</p>
+                <p class="upload-text">Upload your group's 1-page memo.</p>
+                <div class="upload-actions">
+                  <button class="upload-btn" type="button">Upload Memo</button>
+                  <button class="remove-btn" type="button" aria-label="Remove memo">Remove</button>
+                </div>
+                <div class="file-meta" data-status>Ready to Submit</div>
+                <input class="hidden-input" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" />
+              </article>
+
+              <article class="upload-card" data-key="email">
+                <div class="upload-head">
+                  <div class="icon-badge" aria-hidden="true">✉️</div>
+                </div>
+                <p class="file-name">S1_email_Student name</p>
+                <p class="upload-text">Upload your email to the marketing department.</p>
+                <div class="upload-actions">
+                  <button class="upload-btn" type="button">Upload Email</button>
+                  <button class="remove-btn" type="button" aria-label="Remove email">Remove</button>
+                </div>
+                <div class="file-meta" data-status>Ready to Submit</div>
+                <input class="hidden-input" type="file" accept=".pdf,.doc,.docx,.txt,.msg" />
+              </article>
+
+              <article class="upload-card" data-key="primer">
+                <div class="upload-head">
+                  <div class="icon-badge" aria-hidden="true">📘</div>
+                </div>
+                <p class="file-name">S1_primer_Student name</p>
+                <p class="upload-text">Upload your group's company primer.</p>
+                <div class="upload-actions">
+                  <button class="upload-btn" type="button">Upload Primer</button>
+                  <button class="remove-btn" type="button" aria-label="Remove primer">Remove</button>
+                </div>
+                <div class="file-meta" data-status>Ready to Submit</div>
+                <input class="hidden-input" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" />
+              </article>
+
+              <article class="upload-card" data-key="video">
+                <div class="upload-head">
+                  <div class="icon-badge" aria-hidden="true">🎬</div>
+                </div>
+                <p class="file-name">S1_video_Student name</p>
+                <p class="upload-text">Upload your illustrative video.</p>
+                <div class="upload-actions">
+                  <button class="upload-btn" type="button">Upload Video</button>
+                  <button class="remove-btn" type="button" aria-label="Remove video">Remove</button>
+                </div>
+                <div class="file-meta" data-status>Ready to Submit</div>
+                <input class="hidden-input" type="file" accept=".mp4,.mov,.avi,.mkv,.wmv,.webm,.m4v" />
+              </article>
+
+              <article class="upload-card" data-key="reflection">
+                <div class="upload-head">
+                  <div class="icon-badge" aria-hidden="true">📝</div>
+                  <span class="not-graded">NOT GRADED</span>
+                </div>
+                <p class="file-name">S1_video reflection_Student name</p>
+                <p class="upload-text">Upload your video reflection journal.</p>
+                <div class="upload-actions">
+                  <button class="upload-btn" type="button">Upload Reflection</button>
+                  <button class="remove-btn" type="button" aria-label="Remove reflection">Remove</button>
+                </div>
+                <div class="file-meta" data-status>Ready to Submit</div>
+                <input class="hidden-input" type="file" accept=".mp4,.mov,.avi,.mkv,.wmv,.webm,.m4v,.pdf,.doc,.docx" />
+              </article>
+            </div>
+
+            <div class="note-box">
+              <p>
+                Note that for group deliverables, every group member must upload! You can all upload the same file, but please do not leave it missing.
+                <br /><br />
+                Also, note that you need to submit your deliverables for the Scenario Knowledge Check to appear.
+              </p>
+            </div>
+
+            <div class="checklist-wrap" id="submissions">
+              <div class="section-header" style="margin-bottom: 10px;">
+                <span class="eyebrow">Progress</span>
+                <h2 class="section-title">Dino's Submission Checklist 🌿</h2>
+              </div>
+
+              <ul class="checklist" aria-label="Submission checklist">
+                <li class="check-item" data-check="memo"><span class="checkmark">✓</span><span class="check-label">Memo</span></li>
+                <li class="check-item" data-check="email"><span class="checkmark">✓</span><span class="check-label">Email</span></li>
+                <li class="check-item" data-check="primer"><span class="checkmark">✓</span><span class="check-label">Primer</span></li>
+                <li class="check-item" data-check="video"><span class="checkmark">✓</span><span class="check-label">Video</span></li>
+                <li class="check-item" data-check="reflection"><span class="checkmark">✓</span><span class="check-label">Reflection</span></li>
+              </ul>
+
+              <div class="progress-box">
+                <div class="progress-bar" aria-label="Submission progress">
+                  <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0/5 files selected</div>
+              </div>
+
+              <div class="completion-msg" id="completionMsg">Roar-some! All 5 deliverables are ready! 🦖💚</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer id="contact">
+        <div class="footer-inner">
+          <p>Made with 💚, sunshine ☀️, and a little dinosaur magic 🦕</p>
+          <p>© 2026 Jasmine Closellda Melia anak Jerry | Digital Portfolio</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      const loader = document.getElementById('loader');
+      window.addEventListener('load', () => {
+        setTimeout(() => loader.classList.add('hidden'), 700);
+      });
+
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+      menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+      });
+
+      navLinks.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => navLinks.classList.remove('open'));
+      });
+
+      const uploadCards = [...document.querySelectorAll('.upload-card')];
+      const checklistItems = [...document.querySelectorAll('.check-item')];
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      const completionMsg = document.getElementById('completionMsg');
+
+      function updateTracker() {
+        const selected = uploadCards.filter((card) => {
+          const file = card.querySelector('input[type="file"]').files[0];
+          return !!file;
+        }).length;
+
+        progressText.textContent = `${selected}/5 files selected`;
+        progressFill.style.width = `${(selected / 5) * 100}%`;
+
+        checklistItems.forEach((item) => {
+          const key = item.dataset.check;
+          const card = uploadCards.find((entry) => entry.dataset.key === key);
+          const loaded = !!card.querySelector('input[type="file"]').files[0];
+          item.classList.toggle('complete', loaded);
+        });
+
+        completionMsg.classList.toggle('show', selected === 5);
+      }
+
+      uploadCards.forEach((card) => {
+        const input = card.querySelector('input[type="file"]');
+        const uploadBtn = card.querySelector('.upload-btn');
+        const removeBtn = card.querySelector('.remove-btn');
+        const status = card.querySelector('[data-status]');
+
+        function setStatus(message, type) {
+          status.textContent = message;
+          status.classList.toggle('status-selected', type === 'selected');
+          status.classList.toggle('status-ready', type === 'ready');
+        }
+
+        uploadBtn.addEventListener('click', () => input.click());
+
+        input.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+
+          const validTypes = input.accept
+            .split(',')
+            .map((type) => type.trim().toLowerCase())
+            .filter(Boolean);
+
+          const fileName = file.name.toLowerCase();
+          const isValid = validTypes.some((type) => {
+            if (type === '.pdf') return fileName.endsWith('.pdf');
+            if (type === '.doc') return fileName.endsWith('.doc');
+            if (type === '.docx') return fileName.endsWith('.docx');
+            if (type === '.ppt') return fileName.endsWith('.ppt');
+            if (type === '.pptx') return fileName.endsWith('.pptx');
+            if (type === '.mp4') return fileName.endsWith('.mp4');
+            if (type === '.mov') return fileName.endsWith('.mov');
+            if (type === '.avi') return fileName.endsWith('.avi');
+            if (type === '.mkv') return fileName.endsWith('.mkv');
+            if (type === '.wmv') return fileName.endsWith('.wmv');
+            if (type === '.webm') return fileName.endsWith('.webm');
+            if (type === '.m4v') return fileName.endsWith('.m4v');
+            if (type === '.msg') return fileName.endsWith('.msg');
+            if (type === '.txt') return fileName.endsWith('.txt');
+            return false;
+          });
+
+          if (!isValid) {
+            setStatus('Unsupported file type', 'ready');
+            input.value = '';
+            return;
+          }
+
+          const message = file.name.length > 20 ? `${file.name.slice(0, 18)}...` : file.name;
+          setStatus(`File Selected: ${message}`, 'selected');
+          uploadBtn.textContent = 'Replace File';
+          updateTracker();
+        });
+
+        removeBtn.addEventListener('click', () => {
+          input.value = '';
+          setStatus('Ready to Submit', 'ready');
+          uploadBtn.textContent = card.dataset.key === 'memo'
+            ? 'Upload Memo' : card.dataset.key === 'email'
+            ? 'Upload Email' : card.dataset.key === 'primer'
+            ? 'Upload Primer' : card.dataset.key === 'video'
+            ? 'Upload Video' : 'Upload Reflection';
+          updateTracker();
+        });
+      });
+
+      updateTracker();
+    </script>
+  </body>
+</html>
